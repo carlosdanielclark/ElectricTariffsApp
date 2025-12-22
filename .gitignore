@@ -52,6 +52,9 @@ build/
 .coverage
 htmlcov/
 
+# Pruebas manuales (archivo de verificación rápida)
+manual_checks.py
+
 # Environment
 .env.local
 .env.production
