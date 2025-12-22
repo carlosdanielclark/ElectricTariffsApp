@@ -83,19 +83,10 @@ def main() -> None:
     print("\n" + "=" * 50)
     print("Electric Tariffs App v4.0")
     print("=" * 50)
-    print("Iniciando interfaz de usuario...")
+    print("Iniciando interfaz de usuario...\n")
     
-    # TODO: Importar y ejecutar Flet app en Etapa 3
-    # from ui.app import run_app
-    # run_app()
-    
-    # Placeholder temporal para pruebas de Etapa 1
-    print("\n[Etapa 1 Completada - UI pendiente para Etapa 3]")
-    print("\nPruebas disponibles:")
-    print("  - Base de datos creada: app_database.db")
-    print("  - Archivo de logs: logs_actividad.csv")
-    print("  - Recovery key: recovery_key.txt")
-    print("\nEjecuta las pruebas indicadas para validar esta etapa.")
+    from ui.app import run_app
+    run_app()
 
 
 if __name__ == "__main__":
