@@ -1,0 +1,57 @@
+# Electric Tariffs App - Git Ignore
+# ==================================
+
+# Entorno virtual
+venv/
+.venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Base de datos (generada en runtime)
+app_database.db
+*.db
+
+# Logs (generados en runtime)
+logs_actividad.csv
+*.csv
+
+# Recovery key (seguridad)
+recovery_key.txt
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Backups
+*.zip
+backups/
+
+# Exports
+exports/
+*.xlsx
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Distribución
+dist/
+build/
+*.egg-info/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment
+.env.local
+.env.production

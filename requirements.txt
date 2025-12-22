@@ -1,0 +1,14 @@
+# Electric Tariffs App - Dependencias
+# ====================================
+
+# UI Framework
+flet>=0.21.0
+
+# Seguridad - Hashing de contraseñas
+bcrypt>=4.1.0
+
+# Exportación Excel
+openpyxl>=3.1.0
+
+# Variables de entorno
+python-dotenv>=1.0.0
