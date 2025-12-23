@@ -51,7 +51,7 @@ def create_medidores_view(
         content=ft.Column(
             controls=[
                 ft.Icon(
-                    ft.icons.ELECTRIC_METER_OUTLINED,
+                    ft.Icons.ELECTRIC_METER_OUTLINED,
                     size=64,
                     color=Colors.TEXT_SECONDARY,
                 ),
@@ -131,7 +131,7 @@ def create_medidores_view(
         if on_seleccionar_medidor:
             acciones.append(
                 ft.IconButton(
-                    icon=ft.icons.VISIBILITY,
+                    icon=ft.Icons.VISIBILITY,
                     icon_color=Colors.PRIMARY,
                     tooltip="Ver lecturas",
                     on_click=lambda _, m=medidor: on_seleccionar_medidor(m),
@@ -141,13 +141,13 @@ def create_medidores_view(
         if es_propietario or app_state.es_admin:
             acciones.extend([
                 ft.IconButton(
-                    icon=ft.icons.EDIT,
+                    icon=ft.Icons.EDIT,
                     icon_color=Colors.INFO,
                     tooltip="Editar",
                     on_click=lambda _, m=medidor: show_editar_dialog(m),
                 ),
                 ft.IconButton(
-                    icon=ft.icons.DELETE,
+                    icon=ft.Icons.DELETE,
                     icon_color=Colors.ERROR,
                     tooltip="Eliminar",
                     on_click=lambda _, m=medidor: show_eliminar_dialog(m),
@@ -158,7 +158,7 @@ def create_medidores_view(
             content=ft.Row(
                 controls=[
                     ft.Icon(
-                        ft.icons.ELECTRIC_METER,
+                        ft.Icons.ELECTRIC_METER,
                         size=40,
                         color=Colors.PRIMARY,
                     ),
@@ -389,7 +389,7 @@ def create_medidores_view(
                 ),
                 ft.ElevatedButton(
                     text="Nuevo Medidor",
-                    icon=ft.icons.ADD,
+                    icon=ft.Icons.ADD,
                     on_click=show_crear_dialog,
                     **get_button_style(is_primary=True),
                 ),

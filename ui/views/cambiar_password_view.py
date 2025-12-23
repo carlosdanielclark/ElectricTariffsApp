@@ -40,7 +40,7 @@ def create_cambiar_password_view(
     # Controles
     txt_actual = ft.TextField(
         label="Contraseña actual",
-        prefix_icon=ft.icons.LOCK_OPEN,
+        prefix_icon=ft.Icons.LOCK_OPEN,
         password=True,
         can_reveal_password=True,
         **get_input_style(is_dark),
@@ -48,7 +48,7 @@ def create_cambiar_password_view(
     
     txt_nueva = ft.TextField(
         label="Nueva contraseña",
-        prefix_icon=ft.icons.LOCK,
+        prefix_icon=ft.Icons.LOCK,
         password=True,
         can_reveal_password=True,
         hint_text="Mínimo 6 caracteres y 1 número",
@@ -57,7 +57,7 @@ def create_cambiar_password_view(
     
     txt_confirmar = ft.TextField(
         label="Confirmar nueva contraseña",
-        prefix_icon=ft.icons.LOCK_OUTLINE,
+        prefix_icon=ft.Icons.LOCK_OUTLINE,
         password=True,
         can_reveal_password=True,
         **get_input_style(is_dark),
@@ -118,7 +118,7 @@ def create_cambiar_password_view(
     # Header con icono de advertencia si es obligatorio
     header_controls = [
         ft.Icon(
-            ft.icons.WARNING_AMBER if es_obligatorio else ft.icons.LOCK_RESET,
+            ft.Icons.WARNING_AMBER if es_obligatorio else ft.Icons.LOCK_RESET,
             size=48,
             color=Colors.WARNING if es_obligatorio else Colors.PRIMARY,
         ),

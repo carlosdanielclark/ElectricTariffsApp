@@ -148,17 +148,17 @@ class ElectricTariffsApp:
         
         # Items del menú
         menu_items = [
-            self._build_menu_item(ft.icons.ELECTRIC_METER, "Medidores", self._show_main_app, True),
-            self._build_menu_item(ft.icons.HISTORY, "Lecturas", None, False),  # Próxima etapa
-            self._build_menu_item(ft.icons.BAR_CHART, "Dashboard", None, False),  # Próxima etapa
+            self._build_menu_item(ft.Icons.ELECTRIC_METER, "Medidores", self._show_main_app, True),
+            self._build_menu_item(ft.Icons.HISTORY, "Lecturas", None, False),  # Próxima etapa
+            self._build_menu_item(ft.Icons.BAR_CHART, "Dashboard", None, False),  # Próxima etapa
         ]
         
         # Items admin
         if self._app_state.es_admin:
             menu_items.extend([
                 ft.Divider(height=1, color=Colors.BORDER_DARK if self._is_dark() else Colors.BORDER_LIGHT),
-                self._build_menu_item(ft.icons.PEOPLE, "Usuarios", None, False),
-                self._build_menu_item(ft.icons.PRICE_CHANGE, "Tarifas", None, False),
+                self._build_menu_item(ft.Icons.PEOPLE, "Usuarios", None, False),
+                self._build_menu_item(ft.Icons.PRICE_CHANGE, "Tarifas", None, False),
             ])
         
         # Toggle de tema
@@ -176,7 +176,7 @@ class ElectricTariffsApp:
                         content=ft.Column(
                             controls=[
                                 ft.Icon(
-                                    ft.icons.BOLT,
+                                    ft.Icons.BOLT,
                                     size=40,
                                     color=Colors.PRIMARY,
                                 ),
@@ -247,7 +247,7 @@ class ElectricTariffsApp:
                                 tema_switch,
                                 ft.ElevatedButton(
                                     text="Cerrar Sesión",
-                                    icon=ft.icons.LOGOUT,
+                                    icon=ft.Icons.LOGOUT,
                                     width=Sizes.SIDEBAR_WIDTH - 32,
                                     on_click=self._handle_logout,
                                     bgcolor=Colors.ERROR,

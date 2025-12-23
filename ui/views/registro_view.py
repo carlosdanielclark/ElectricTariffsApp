@@ -39,20 +39,20 @@ def create_registro_view(
     # Controles
     txt_nombre = ft.TextField(
         label="Nombre completo",
-        prefix_icon=ft.icons.BADGE,
+        prefix_icon=ft.Icons.BADGE,
         **get_input_style(is_dark),
     )
     
     txt_usuario = ft.TextField(
         label="Usuario",
-        prefix_icon=ft.icons.PERSON,
+        prefix_icon=ft.Icons.PERSON,
         hint_text="Mínimo 3 caracteres",
         **get_input_style(is_dark),
     )
     
     txt_password = ft.TextField(
         label="Contraseña",
-        prefix_icon=ft.icons.LOCK,
+        prefix_icon=ft.Icons.LOCK,
         password=True,
         can_reveal_password=True,
         hint_text="Mínimo 6 caracteres y 1 número",
@@ -61,7 +61,7 @@ def create_registro_view(
     
     txt_confirmar = ft.TextField(
         label="Confirmar contraseña",
-        prefix_icon=ft.icons.LOCK_OUTLINE,
+        prefix_icon=ft.Icons.LOCK_OUTLINE,
         password=True,
         can_reveal_password=True,
         **get_input_style(is_dark),
@@ -128,7 +128,7 @@ def create_registro_view(
                 ft.Row(
                     controls=[
                         ft.IconButton(
-                            icon=ft.icons.ARROW_BACK,
+                            icon=ft.Icons.ARROW_BACK,
                             icon_color=Colors.PRIMARY,
                             on_click=lambda _: on_volver_login(),
                         ),

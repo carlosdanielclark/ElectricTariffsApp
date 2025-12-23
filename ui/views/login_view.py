@@ -41,13 +41,13 @@ def create_login_view(
     # Controles
     txt_usuario = ft.TextField(
         label="Usuario",
-        prefix_icon=ft.icons.PERSON,
+        prefix_icon=ft.Icons.PERSON,
         **get_input_style(is_dark),
     )
     
     txt_password = ft.TextField(
         label="Contraseña",
-        prefix_icon=ft.icons.LOCK,
+        prefix_icon=ft.Icons.LOCK,
         password=True,
         can_reveal_password=True,
         **get_input_style(is_dark),
@@ -179,7 +179,7 @@ def create_login_view(
             controls=[
                 # Logo/Título
                 ft.Icon(
-                    ft.icons.BOLT,
+                    ft.Icons.BOLT,
                     size=64,
                     color=Colors.PRIMARY,
                 ),
