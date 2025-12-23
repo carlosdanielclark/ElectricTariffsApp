@@ -18,6 +18,8 @@ from ui.views.login_view import create_login_view
 from ui.views.registro_view import create_registro_view
 from ui.views.cambiar_password_view import create_cambiar_password_view
 from ui.views.medidores_view import create_medidores_view
+from ui.views.lecturas_view import create_lecturas_view
+from ui.views.dashboard_view import create_dashboard_view
 from ui.viewmodels.auth_viewmodel import AuthViewModel
 
 
@@ -28,6 +30,8 @@ class ElectricTariffsApp:
         self.page = page
         self._app_state = get_app_state()
         self._auth_viewmodel = AuthViewModel()
+        self._vista_activa = "medidores"  # medidores, dashboard, lecturas
+        self._medidor_seleccionado: Optional[Medidor] = None
         
         # Configuración de la página
         self._setup_page()
@@ -114,12 +118,45 @@ class ElectricTariffsApp:
     
     def _show_main_app(self) -> None:
         """Muestra la aplicación principal después del login."""
-        # Contenido principal (medidores por ahora)
-        content = create_medidores_view(
-            page=self.page,
-            on_seleccionar_medidor=self._on_seleccionar_medidor,
-            is_dark=self._is_dark(),
-        )
+        self._vista_activa = "medidores"
+        self._medidor_seleccionado = None
+        self._render_main_layout()
+    
+    def _show_dashboard(self) -> None:
+        """Muestra el dashboard."""
+        self._vista_activa = "dashboard"
+        self._medidor_seleccionado = None
+        self._render_main_layout()
+    
+    def _show_lecturas(self, medidor: Medidor) -> None:
+        """Muestra las lecturas de un medidor."""
+        self._vista_activa = "lecturas"
+        self._medidor_seleccionado = medidor
+        self._render_main_layout()
+    
+    def _render_main_layout(self) -> None:
+        """Renderiza el layout principal con la vista activa."""
+        # Determinar contenido según vista activa
+        if self._vista_activa == "dashboard":
+            content = create_dashboard_view(
+                page=self.page,
+                on_seleccionar_medidor=self._on_seleccionar_medidor,
+                is_dark=self._is_dark(),
+            )
+        elif self._vista_activa == "lecturas" and self._medidor_seleccionado:
+            content = create_lecturas_view(
+                page=self.page,
+                medidor=self._medidor_seleccionado,
+                on_volver=self._show_main_app,
+                is_dark=self._is_dark(),
+            )
+        else:
+            # Vista por defecto: medidores
+            content = create_medidores_view(
+                page=self.page,
+                on_seleccionar_medidor=self._on_seleccionar_medidor,
+                is_dark=self._is_dark(),
+            )
         
         # Sidebar
         sidebar = self._build_sidebar()
@@ -146,11 +183,20 @@ class ElectricTariffsApp:
         nombre = usuario.nombre if usuario else "Usuario"
         rol = "Administrador" if self._app_state.es_admin else "Usuario"
         
-        # Items del menú
+        # Items del menú con estado activo
         menu_items = [
-            self._build_menu_item(ft.Icons.ELECTRIC_METER, "Medidores", self._show_main_app, True),
-            self._build_menu_item(ft.Icons.HISTORY, "Lecturas", None, False),  # Próxima etapa
-            self._build_menu_item(ft.Icons.BAR_CHART, "Dashboard", None, False),  # Próxima etapa
+            self._build_menu_item(
+                ft.Icons.DASHBOARD,
+                "Dashboard",
+                self._show_dashboard,
+                self._vista_activa == "dashboard"
+            ),
+            self._build_menu_item(
+                ft.Icons.ELECTRIC_METER,
+                "Medidores",
+                self._show_main_app,
+                self._vista_activa == "medidores"
+            ),
         ]
         
         # Items admin
@@ -317,12 +363,7 @@ class ElectricTariffsApp:
     
     def _on_seleccionar_medidor(self, medidor: Medidor) -> None:
         """Callback cuando se selecciona un medidor."""
-        # TODO: Mostrar vista de lecturas del medidor (Etapa 4)
-        show_snackbar(
-            self.page,
-            f"Medidor seleccionado: {medidor.etiqueta} (Vista de lecturas próxima etapa)",
-            "info"
-        )
+        self._show_lecturas(medidor)
     
     def _handle_logout(self, e) -> None:
         """Maneja el cierre de sesión."""
