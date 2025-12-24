@@ -2,6 +2,7 @@
 Electric Tariffs App - Estilos y Constantes Visuales
 ====================================================
 Según RNF-01: Color primario #219cba, fuente Inter, border_radius=15
+Diseño actualizado para coincidir con mockups HTML.
 """
 
 import flet as ft
@@ -10,32 +11,41 @@ from core.config import PRIMARY_COLOR, BORDER_RADIUS, FONT_FAMILY
 
 
 # =============================================================================
-# COLORES
+# COLORES (Actualizados según diseño HTML)
 # =============================================================================
 
 class Colors:
     """Paleta de colores de la aplicación."""
     PRIMARY = PRIMARY_COLOR  # #219cba
-    PRIMARY_DARK = "#1a7a94"
+    PRIMARY_DARK = "#1a8da8"
     PRIMARY_LIGHT = "#4bb8d4"
     
-    BACKGROUND_DARK = "#1a1a2e"
-    BACKGROUND_LIGHT = "#f5f5f5"
+    # Fondos según diseño HTML
+    BACKGROUND_DARK = "#121d20"
+    BACKGROUND_LIGHT = "#f6f7f8"
     
-    SURFACE_DARK = "#252542"
+    # Superficies
+    SURFACE_DARK = "#1a2629"
     SURFACE_LIGHT = "#ffffff"
     
+    # Textos
     TEXT_DARK = "#ffffff"
-    TEXT_LIGHT = "#1a1a2e"
-    TEXT_SECONDARY = "#888888"
+    TEXT_LIGHT = "#1e293b"  # slate-800
+    TEXT_SECONDARY = "#64748b"  # slate-500
+    TEXT_MUTED = "#94a3b8"  # slate-400
     
-    SUCCESS = "#4caf50"
-    WARNING = "#ff9800"
-    ERROR = "#f44336"
-    INFO = "#2196f3"
+    # Estados
+    SUCCESS = "#22c55e"  # green-500
+    WARNING = "#f97316"  # orange-500
+    ERROR = "#ef4444"  # red-500
+    INFO = "#3b82f6"  # blue-500
     
-    BORDER_DARK = "#3a3a5c"
-    BORDER_LIGHT = "#e0e0e0"
+    # Bordes
+    BORDER_DARK = "rgba(255,255,255,0.1)"
+    BORDER_LIGHT = "#e5e7eb"  # gray-200
+    
+    # Cyan para gradientes
+    CYAN_400 = "#22d3ee"
 
 
 # =============================================================================
@@ -44,18 +54,22 @@ class Colors:
 
 class Sizes:
     """Dimensiones estándar."""
-    BORDER_RADIUS = BORDER_RADIUS  # 15
+    BORDER_RADIUS = 16  # Actualizado según diseño
+    BORDER_RADIUS_SM = 8
+    BORDER_RADIUS_LG = 24
+    
+    PADDING_XS = 4
     PADDING_SM = 8
     PADDING_MD = 16
     PADDING_LG = 24
     PADDING_XL = 32
     
-    BUTTON_HEIGHT = 48
-    INPUT_HEIGHT = 50
+    BUTTON_HEIGHT = 44
+    INPUT_HEIGHT = 44
     ICON_SIZE = 24
     
-    SIDEBAR_WIDTH = 250
-    SIDEBAR_COLLAPSED = 70
+    SIDEBAR_WIDTH = 288  # w-72 = 18rem = 288px
+    HEADER_HEIGHT = 64  # h-16 = 4rem
     
     CARD_WIDTH = 400
     CARD_WIDTH_SM = 320
@@ -66,28 +80,28 @@ class Sizes:
 # =============================================================================
 
 def get_input_style(is_dark: bool = True) -> dict:
-    """Estilo para TextField."""
+    """Estilo para TextField según diseño HTML."""
     return {
         "border_radius": Sizes.BORDER_RADIUS,
         "border_color": Colors.BORDER_DARK if is_dark else Colors.BORDER_LIGHT,
         "focused_border_color": Colors.PRIMARY,
         "cursor_color": Colors.PRIMARY,
+        "bgcolor": "rgba(0,0,0,0.2)" if is_dark else Colors.SURFACE_LIGHT,
         "text_style": ft.TextStyle(
             color=Colors.TEXT_DARK if is_dark else Colors.TEXT_LIGHT,
+            size=14,
         ),
         "label_style": ft.TextStyle(
-            color=Colors.TEXT_SECONDARY,
+            color=Colors.TEXT_MUTED,
+            size=12,
         ),
         "height": Sizes.INPUT_HEIGHT,
-        "content_padding": ft.padding.symmetric(horizontal=16, vertical=12),
+        "content_padding": ft.padding.symmetric(horizontal=12, vertical=8),
     }
 
 
-def get_button_style(
-    is_primary: bool = True,
-    is_dark: bool = True
-) -> dict:
-    """Estilo para ElevatedButton."""
+def get_button_style(is_primary: bool = True, is_dark: bool = True) -> dict:
+    """Estilo para ElevatedButton según diseño HTML."""
     if is_primary:
         return {
             "bgcolor": Colors.PRIMARY,
@@ -96,6 +110,7 @@ def get_button_style(
             "style": ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=Sizes.BORDER_RADIUS),
                 elevation=2,
+                shadow_color=ft.Colors.with_opacity(0.2, Colors.PRIMARY),
             ),
         }
     else:
@@ -111,17 +126,37 @@ def get_button_style(
 
 
 def get_card_style(is_dark: bool = True) -> dict:
-    """Estilo para Card/Container."""
+    """Estilo para Card/Container según diseño HTML."""
     return {
         "bgcolor": Colors.SURFACE_DARK if is_dark else Colors.SURFACE_LIGHT,
         "border_radius": Sizes.BORDER_RADIUS,
         "padding": Sizes.PADDING_LG,
+        "border": ft.border.all(
+            1,
+            ft.Colors.with_opacity(0.1, ft.Colors.WHITE) if is_dark else Colors.BORDER_LIGHT
+        ),
         "shadow": ft.BoxShadow(
-            spread_radius=1,
+            spread_radius=0,
             blur_radius=10,
-            color=ft.colors.with_opacity(0.1, ft.colors.BLACK),
+            color=ft.Colors.with_opacity(0.1, ft.Colors.BLACK),
             offset=ft.Offset(0, 4),
         ),
+    }
+
+
+def get_sidebar_item_style(is_active: bool = False, is_dark: bool = True) -> dict:
+    """Estilo para items del sidebar."""
+    if is_active:
+        return {
+            "bgcolor": ft.Colors.with_opacity(0.1, Colors.PRIMARY),
+            "border_radius": Sizes.BORDER_RADIUS,
+            "padding": ft.padding.symmetric(horizontal=12, vertical=10),
+            "border": ft.border.all(1, ft.Colors.with_opacity(0.2, Colors.PRIMARY)),
+        }
+    return {
+        "bgcolor": "transparent",
+        "border_radius": Sizes.BORDER_RADIUS,
+        "padding": ft.padding.symmetric(horizontal=12, vertical=10),
     }
 
 
@@ -205,4 +240,62 @@ def create_loading_indicator() -> ft.ProgressRing:
         height=30,
         stroke_width=3,
         color=Colors.PRIMARY,
+    )
+
+
+def create_stat_card(
+    title: str,
+    value: str,
+    subtitle: str = "",
+    icon: str = "bolt",
+    icon_bg_color: str = None,
+    is_dark: bool = True
+) -> ft.Container:
+    """
+    Crea una tarjeta de estadística según diseño HTML.
+    """
+    bg_color = icon_bg_color or ft.Colors.with_opacity(0.1, Colors.PRIMARY)
+    
+    return ft.Container(
+        content=ft.Column(
+            controls=[
+                ft.Row(
+                    controls=[
+                        ft.Container(
+                            content=ft.Icon(
+                                getattr(ft.Icons, icon.upper(), ft.Icons.BOLT),
+                                color=Colors.PRIMARY,
+                                size=24,
+                            ),
+                            width=48,
+                            height=48,
+                            border_radius=12,
+                            bgcolor=bg_color,
+                            alignment=ft.alignment.center,
+                        ),
+                    ],
+                ),
+                ft.Container(height=12),
+                ft.Text(
+                    title,
+                    size=14,
+                    color=Colors.TEXT_SECONDARY,
+                    weight=ft.FontWeight.W_500,
+                ),
+                ft.Text(
+                    value,
+                    size=28,
+                    color=Colors.TEXT_DARK if is_dark else Colors.TEXT_LIGHT,
+                    weight=ft.FontWeight.BOLD,
+                ),
+                ft.Text(
+                    subtitle,
+                    size=12,
+                    color=Colors.TEXT_MUTED,
+                ) if subtitle else ft.Container(),
+            ],
+            spacing=4,
+        ),
+        **get_card_style(is_dark),
+        expand=True,
     )

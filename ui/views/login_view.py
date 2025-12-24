@@ -105,6 +105,10 @@ def create_login_view(
     txt_password.on_submit = handle_login
     txt_usuario.on_submit = lambda _: txt_password.focus()
     
+    # Handler para ir a registro - CORREGIDO
+    def go_to_registro(e):
+        on_registro()
+    
     def show_recovery_dialog(e):
         txt_clave = ft.TextField(
             label="Clave de recuperación",
@@ -178,11 +182,19 @@ def create_login_view(
         content=ft.Column(
             controls=[
                 # Logo/Título
-                ft.Icon(
-                    ft.Icons.BOLT,
-                    size=64,
-                    color=Colors.PRIMARY,
+                ft.Container(
+                    content=ft.Icon(
+                        ft.Icons.BOLT,
+                        size=48,
+                        color=Colors.PRIMARY,
+                    ),
+                    width=80,
+                    height=80,
+                    border_radius=40,
+                    bgcolor=ft.Colors.with_opacity(0.1, Colors.PRIMARY),
+                    alignment=ft.alignment.center,
                 ),
+                ft.Container(height=16),
                 ft.Text(
                     "Electric Tariffs",
                     size=28,
@@ -195,17 +207,17 @@ def create_login_view(
                     color=Colors.TEXT_SECONDARY,
                 ),
                 
-                ft.Container(height=20),
+                ft.Container(height=24),
                 
                 # Campos
                 txt_usuario,
-                ft.Container(height=8),
+                ft.Container(height=12),
                 txt_password,
                 
                 ft.Container(height=8),
                 error_text,
                 
-                ft.Container(height=16),
+                ft.Container(height=20),
                 
                 # Botón y loading
                 ft.Stack(
@@ -220,21 +232,28 @@ def create_login_view(
                     ],
                 ),
                 
-                ft.Container(height=16),
+                ft.Container(height=20),
                 
-                # Enlaces
+                # Enlaces - CORREGIDO: usando funciones en lugar de lambdas inline
                 ft.Row(
                     controls=[
                         ft.TextButton(
                             text="Crear cuenta",
-                            on_click=lambda _: on_registro(),
+                            on_click=go_to_registro,  # Función definida arriba
+                            style=ft.ButtonStyle(
+                                color=Colors.PRIMARY,
+                            ),
                         ),
                         ft.TextButton(
                             text="¿Olvidaste tu contraseña?",
                             on_click=show_recovery_dialog,
+                            style=ft.ButtonStyle(
+                                color=Colors.TEXT_SECONDARY,
+                            ),
                         ),
                     ],
                     alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                    width=320,
                 ),
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
