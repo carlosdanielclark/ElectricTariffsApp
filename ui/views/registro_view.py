@@ -121,6 +121,10 @@ def create_registro_view(
     txt_usuario.on_submit = lambda _: txt_password.focus()
     txt_password.on_submit = lambda _: txt_confirmar.focus()
     
+    # Handler para volver al login - CORREGIDO
+    def go_back_to_login(e):
+        on_volver_login()
+    
     card_content = ft.Container(
         content=ft.Column(
             controls=[
@@ -130,7 +134,7 @@ def create_registro_view(
                         ft.IconButton(
                             icon=ft.Icons.ARROW_BACK,
                             icon_color=Colors.PRIMARY,
-                            on_click=lambda _: on_volver_login(),
+                            on_click=go_back_to_login,
                         ),
                         ft.Text(
                             "Crear Cuenta",
@@ -184,7 +188,7 @@ def create_registro_view(
                 # Link volver
                 ft.TextButton(
                     text="¿Ya tienes cuenta? Inicia sesión",
-                    on_click=lambda _: on_volver_login(),
+                    on_click=go_back_to_login,
                 ),
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,

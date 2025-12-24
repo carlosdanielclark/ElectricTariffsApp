@@ -115,6 +115,11 @@ def create_cambiar_password_view(
     txt_actual.on_submit = lambda _: txt_nueva.focus()
     txt_nueva.on_submit = lambda _: txt_confirmar.focus()
     
+    # Handler para cancelar - CORREGIDO
+    def handle_cancel(e):
+        if on_cancel:
+            on_cancel()
+    
     # Header con icono de advertencia si es obligatorio
     header_controls = [
         ft.Icon(
@@ -160,7 +165,7 @@ def create_cambiar_password_view(
         action_controls.append(
             ft.TextButton(
                 text="Cancelar",
-                on_click=lambda _: on_cancel(),
+                on_click=handle_cancel,
             )
         )
     

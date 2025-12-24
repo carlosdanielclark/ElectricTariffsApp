@@ -44,6 +44,10 @@ def create_lecturas_view(
     lecturas_lista: List[Lectura] = []
     lectura_editando: Optional[Lectura] = None
     
+    # Handler para volver - CORREGIDO
+    def handle_volver(e):
+        on_volver()
+    
     # =========================================================================
     # COMPONENTES UI
     # =========================================================================
@@ -541,7 +545,7 @@ def create_lecturas_view(
             controls=[
                 ft.IconButton(
                     icon=ft.Icons.ARROW_BACK,
-                    on_click=lambda e: on_volver(),
+                    on_click=handle_volver,
                     tooltip="Volver",
                 ),
                 ft.Icon(ft.Icons.ELECTRIC_METER, size=32, color=Colors.PRIMARY),
