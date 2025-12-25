@@ -83,7 +83,12 @@ def create_registro_view(
         **get_button_style(is_primary=True),
     )
     
+    # =========================================================================
+    # HANDLERS - Definidos como funciones para evitar problemas con lambdas
+    # =========================================================================
+    
     def handle_registro(e):
+        """Handler para el botón de registro."""
         nombre = txt_nombre.value or ""
         usuario = txt_usuario.value or ""
         password = txt_password.value or ""
@@ -115,15 +120,20 @@ def create_registro_view(
         
         page.update()
     
+    def go_back_to_login(e):
+        """Handler para volver al login."""
+        on_volver_login()
+    
+    # Asignar handlers
     btn_registrar.on_click = handle_registro
     txt_confirmar.on_submit = handle_registro
     txt_nombre.on_submit = lambda _: txt_usuario.focus()
     txt_usuario.on_submit = lambda _: txt_password.focus()
     txt_password.on_submit = lambda _: txt_confirmar.focus()
     
-    # Handler para volver al login - CORREGIDO
-    def go_back_to_login(e):
-        on_volver_login()
+    # =========================================================================
+    # LAYOUT
+    # =========================================================================
     
     card_content = ft.Container(
         content=ft.Column(

@@ -79,7 +79,12 @@ def create_cambiar_password_view(
         **get_button_style(is_primary=True),
     )
     
+    # =========================================================================
+    # HANDLERS - Definidos como funciones para evitar problemas con lambdas
+    # =========================================================================
+    
     def handle_cambiar(e):
+        """Handler para el botón de cambiar contraseña."""
         actual = txt_actual.value or ""
         nueva = txt_nueva.value or ""
         confirmar = txt_confirmar.value or ""
@@ -110,15 +115,20 @@ def create_cambiar_password_view(
         
         page.update()
     
+    def handle_cancel(e):
+        """Handler para el botón de cancelar."""
+        if on_cancel:
+            on_cancel()
+    
+    # Asignar handlers
     btn_cambiar.on_click = handle_cambiar
     txt_confirmar.on_submit = handle_cambiar
     txt_actual.on_submit = lambda _: txt_nueva.focus()
     txt_nueva.on_submit = lambda _: txt_confirmar.focus()
     
-    # Handler para cancelar - CORREGIDO
-    def handle_cancel(e):
-        if on_cancel:
-            on_cancel()
+    # =========================================================================
+    # LAYOUT
+    # =========================================================================
     
     # Header con icono de advertencia si es obligatorio
     header_controls = [

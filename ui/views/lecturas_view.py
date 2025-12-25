@@ -43,10 +43,39 @@ def create_lecturas_view(
     anio_seleccionado = anio_actual
     lecturas_lista: List[Lectura] = []
     lectura_editando: Optional[Lectura] = None
+    lectura_a_eliminar: Optional[int] = None
     
-    # Handler para volver - CORREGIDO
+    # =========================================================================
+    # HANDLERS - Definidos como funciones para evitar problemas con lambdas
+    # =========================================================================
+    
     def handle_volver(e):
+        """Handler para volver a la vista anterior."""
         on_volver()
+    
+    def handle_precalcular(e):
+        """Handler para precalcular lectura."""
+        precalcular_lectura()
+    
+    def handle_cerrar_dialogo(e):
+        """Handler para cerrar diálogo de lectura."""
+        cerrar_dialogo()
+    
+    def handle_guardar_lectura(e):
+        """Handler para guardar lectura."""
+        guardar_lectura()
+    
+    def handle_cerrar_confirmar(e):
+        """Handler para cerrar diálogo de confirmación."""
+        cerrar_confirmar()
+    
+    def handle_confirmar_eliminacion(e):
+        """Handler para confirmar eliminación."""
+        confirmar_eliminacion()
+    
+    def handle_abrir_nueva(e):
+        """Handler para abrir diálogo de nueva lectura."""
+        abrir_nueva_lectura()
     
     # =========================================================================
     # COMPONENTES UI
@@ -215,7 +244,7 @@ def create_lecturas_view(
     btn_precalcular = ft.ElevatedButton(
         text="Calcular",
         icon=ft.Icons.CALCULATE,
-        on_click=lambda e: precalcular_lectura(),
+        on_click=handle_precalcular,
     )
     
     dialogo_lectura = ft.AlertDialog(
@@ -250,11 +279,11 @@ def create_lecturas_view(
             padding=Sizes.PADDING_MD,
         ),
         actions=[
-            ft.TextButton("Cancelar", on_click=lambda e: cerrar_dialogo()),
+            ft.TextButton("Cancelar", on_click=handle_cerrar_dialogo),
             ft.ElevatedButton(
                 "Guardar",
                 icon=ft.Icons.SAVE,
-                on_click=lambda e: guardar_lectura(),
+                on_click=handle_guardar_lectura,
                 **get_button_style("primary"),
             ),
         ],
@@ -267,18 +296,16 @@ def create_lecturas_view(
         title=ft.Text("Confirmar Eliminación"),
         content=ft.Text("¿Estás seguro de eliminar esta lectura? Esta acción no se puede deshacer."),
         actions=[
-            ft.TextButton("Cancelar", on_click=lambda e: cerrar_confirmar()),
+            ft.TextButton("Cancelar", on_click=handle_cerrar_confirmar),
             ft.ElevatedButton(
                 "Eliminar",
                 icon=ft.Icons.DELETE,
                 bgcolor=Colors.ERROR,
                 color=Colors.TEXT_DARK,
-                on_click=lambda e: confirmar_eliminacion(),
+                on_click=handle_confirmar_eliminacion,
             ),
         ],
     )
-    
-    lectura_a_eliminar: Optional[int] = None
     
     # =========================================================================
     # FUNCIONES
@@ -314,6 +341,17 @@ def create_lecturas_view(
                 puede_editar = vm.puede_editar_lectura(lectura)
                 puede_eliminar = vm.puede_eliminar_lectura(lectura)
                 
+                # Crear handlers específicos para esta lectura
+                def crear_handler_edicion(lect):
+                    def handler(e):
+                        abrir_edicion(lect)
+                    return handler
+                
+                def crear_handler_eliminacion(lect_id):
+                    def handler(e):
+                        solicitar_eliminacion(lect_id)
+                    return handler
+                
                 # Acciones
                 acciones = ft.Row(
                     controls=[
@@ -321,7 +359,7 @@ def create_lecturas_view(
                             icon=ft.Icons.EDIT,
                             icon_size=18,
                             tooltip="Editar",
-                            on_click=lambda e, l=lectura: abrir_edicion(l),
+                            on_click=crear_handler_edicion(lectura),
                             disabled=not puede_editar,
                         ),
                         ft.IconButton(
@@ -329,7 +367,7 @@ def create_lecturas_view(
                             icon_size=18,
                             icon_color=Colors.ERROR if puede_eliminar else Colors.TEXT_SECONDARY,
                             tooltip="Eliminar",
-                            on_click=lambda e, l=lectura: solicitar_eliminacion(l.id),
+                            on_click=crear_handler_eliminacion(lectura.id),
                             disabled=not puede_eliminar,
                         ),
                     ],
@@ -570,7 +608,7 @@ def create_lecturas_view(
                 ft.FloatingActionButton(
                     icon=ft.Icons.ADD,
                     bgcolor=Colors.PRIMARY,
-                    on_click=lambda e: abrir_nueva_lectura(),
+                    on_click=handle_abrir_nueva,
                     tooltip="Nueva Lectura",
                     mini=True,
                 ),

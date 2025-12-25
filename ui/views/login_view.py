@@ -69,7 +69,12 @@ def create_login_view(
         **get_button_style(is_primary=True),
     )
     
+    # =========================================================================
+    # HANDLERS - Definidos como funciones para evitar problemas con lambdas
+    # =========================================================================
+    
     def handle_login(e):
+        """Handler para el botón de login."""
         username = txt_usuario.value or ""
         password = txt_password.value or ""
         
@@ -101,15 +106,12 @@ def create_login_view(
         
         page.update()
     
-    btn_login.on_click = handle_login
-    txt_password.on_submit = handle_login
-    txt_usuario.on_submit = lambda _: txt_password.focus()
-    
-    # Handler para ir a registro - CORREGIDO
     def go_to_registro(e):
+        """Handler para ir a registro."""
         on_registro()
     
     def show_recovery_dialog(e):
+        """Muestra el diálogo de recuperación de contraseña."""
         txt_clave = ft.TextField(
             label="Clave de recuperación",
             hint_text="Ingresa la clave de recovery_key.txt",
@@ -129,7 +131,16 @@ def create_login_view(
         )
         error_recovery = ft.Text("", color=Colors.ERROR, size=12)
         
+        # Variable para almacenar referencia al diálogo
+        dlg = None
+        
+        def handle_cancel_recovery(e):
+            """Handler para cancelar recuperación."""
+            if dlg:
+                page.close(dlg)
+        
         def handle_recovery(e):
+            """Handler para ejecutar recuperación."""
             exito, mensaje = viewmodel.recuperar_admin(
                 txt_clave.value or "",
                 txt_nueva.value or "",
@@ -137,7 +148,8 @@ def create_login_view(
             )
             
             if exito:
-                page.close(dlg)
+                if dlg:
+                    page.close(dlg)
                 show_snackbar(page, mensaje, "success")
             else:
                 error_recovery.value = mensaje
@@ -166,7 +178,7 @@ def create_login_view(
                 width=350,
             ),
             actions=[
-                ft.TextButton("Cancelar", on_click=lambda _: page.close(dlg)),
+                ft.TextButton("Cancelar", on_click=handle_cancel_recovery),
                 ft.ElevatedButton(
                     "Recuperar",
                     on_click=handle_recovery,
@@ -177,6 +189,15 @@ def create_login_view(
         )
         
         page.open(dlg)
+    
+    # Asignar handlers
+    btn_login.on_click = handle_login
+    txt_password.on_submit = handle_login
+    txt_usuario.on_submit = lambda _: txt_password.focus()
+    
+    # =========================================================================
+    # LAYOUT
+    # =========================================================================
     
     card_content = ft.Container(
         content=ft.Column(
@@ -234,12 +255,12 @@ def create_login_view(
                 
                 ft.Container(height=20),
                 
-                # Enlaces - CORREGIDO: usando funciones en lugar de lambdas inline
+                # Enlaces
                 ft.Row(
                     controls=[
                         ft.TextButton(
                             text="Crear cuenta",
-                            on_click=go_to_registro,  # Función definida arriba
+                            on_click=go_to_registro,
                             style=ft.ButtonStyle(
                                 color=Colors.PRIMARY,
                             ),

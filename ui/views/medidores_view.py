@@ -79,6 +79,21 @@ def create_medidores_view(
         es_propietario = viewmodel.es_propietario(medidor.id)
         stats = viewmodel.obtener_estadisticas_medidor(medidor.id)
         
+        # Handlers para este medidor específico
+        def handle_ver_lecturas(e):
+            if on_seleccionar_medidor:
+                on_seleccionar_medidor(medidor)
+        
+        def handle_editar(e):
+            show_editar_dialog(medidor)
+        
+        def handle_eliminar(e):
+            show_eliminar_dialog(medidor)
+        
+        def handle_card_click(e):
+            if on_seleccionar_medidor:
+                on_seleccionar_medidor(medidor)
+        
         # Indicador de tipo de acceso
         tipo_badge = ft.Container(
             content=ft.Text(
@@ -134,7 +149,7 @@ def create_medidores_view(
                     icon=ft.Icons.VISIBILITY,
                     icon_color=Colors.PRIMARY,
                     tooltip="Ver lecturas",
-                    on_click=lambda _, m=medidor: on_seleccionar_medidor(m),
+                    on_click=handle_ver_lecturas,
                 )
             )
         
@@ -144,13 +159,13 @@ def create_medidores_view(
                     icon=ft.Icons.EDIT,
                     icon_color=Colors.INFO,
                     tooltip="Editar",
-                    on_click=lambda _, m=medidor: show_editar_dialog(m),
+                    on_click=handle_editar,
                 ),
                 ft.IconButton(
                     icon=ft.Icons.DELETE,
                     icon_color=Colors.ERROR,
                     tooltip="Eliminar",
-                    on_click=lambda _, m=medidor: show_eliminar_dialog(m),
+                    on_click=handle_eliminar,
                 ),
             ])
         
@@ -168,9 +183,7 @@ def create_medidores_view(
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
             ),
             **get_card_style(is_dark),
-            on_click=lambda _, m=medidor: (
-                on_seleccionar_medidor(m) if on_seleccionar_medidor else None
-            ),
+            on_click=handle_card_click,
         )
     
     def cargar_medidores():
@@ -211,6 +224,12 @@ def create_medidores_view(
         )
         error_text = ft.Text("", color=Colors.ERROR, size=12)
         
+        dlg = None
+        
+        def handle_cancelar(e):
+            if dlg:
+                page.close(dlg)
+        
         def handle_crear(e):
             umbral = None
             if txt_umbral.value:
@@ -228,7 +247,8 @@ def create_medidores_view(
             )
             
             if exito:
-                page.close(dlg)
+                if dlg:
+                    page.close(dlg)
                 show_snackbar(page, mensaje, "success")
                 cargar_medidores()
             else:
@@ -252,7 +272,7 @@ def create_medidores_view(
                 width=350,
             ),
             actions=[
-                ft.TextButton("Cancelar", on_click=lambda _: page.close(dlg)),
+                ft.TextButton("Cancelar", on_click=handle_cancelar),
                 ft.ElevatedButton(
                     "Crear",
                     on_click=handle_crear,
@@ -284,6 +304,12 @@ def create_medidores_view(
         )
         error_text = ft.Text("", color=Colors.ERROR, size=12)
         
+        dlg = None
+        
+        def handle_cancelar(e):
+            if dlg:
+                page.close(dlg)
+        
         def handle_editar(e):
             umbral = None
             if txt_umbral.value:
@@ -302,7 +328,8 @@ def create_medidores_view(
             )
             
             if exito:
-                page.close(dlg)
+                if dlg:
+                    page.close(dlg)
                 show_snackbar(page, mensaje, "success")
                 cargar_medidores()
             else:
@@ -326,7 +353,7 @@ def create_medidores_view(
                 width=350,
             ),
             actions=[
-                ft.TextButton("Cancelar", on_click=lambda _: page.close(dlg)),
+                ft.TextButton("Cancelar", on_click=handle_cancelar),
                 ft.ElevatedButton(
                     "Guardar",
                     on_click=handle_editar,
@@ -346,13 +373,20 @@ def create_medidores_view(
         if stats["cantidad_lecturas"] > 0:
             mensaje += f"\n\n⚠️ Se eliminarán {stats['cantidad_lecturas']} lectura(s)."
         
+        dlg = None
+        
+        def handle_cancelar(e):
+            if dlg:
+                page.close(dlg)
+        
         def handle_eliminar(e):
             exito, mensaje_result, _ = viewmodel.eliminar_medidor(
                 medidor.id,
                 confirmar=True,
             )
             
-            page.close(dlg)
+            if dlg:
+                page.close(dlg)
             
             if exito:
                 show_snackbar(page, mensaje_result, "success")
@@ -365,7 +399,7 @@ def create_medidores_view(
             title=ft.Text("Confirmar Eliminación"),
             content=ft.Text(mensaje),
             actions=[
-                ft.TextButton("Cancelar", on_click=lambda _: page.close(dlg)),
+                ft.TextButton("Cancelar", on_click=handle_cancelar),
                 ft.ElevatedButton(
                     "Eliminar",
                     bgcolor=Colors.ERROR,
